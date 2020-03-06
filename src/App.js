@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
+import Group from './Group/Group'
 import Radium, { StyleRoot } from 'radium';
 import { Card } from 'react-bootstrap';
 import { Form } from 'react-bootstrap';
@@ -18,12 +19,16 @@ class App extends Component {
 
     inputAge: 0,
     inputName: '',
-    inputGroup: '1',
+    inputGroupName: '',
 
     persons: [
       // { id: 'aaaaa', name: 'Max', age: 28, group: "1" },
       // { id: 'bbbbb', name: 'Manu', age: 29, group: "2" },
       // { id: 'ccccc', name: 'Stephanie', age: 26, group: "3" }
+    ],
+    groups: [
+      { id: "123", groupName: "testgroup1" }
+
     ],
     otherState: 'some other value',
     showPersons: false
@@ -49,8 +54,8 @@ class App extends Component {
     const group = this.state.inputGroup;
 
     const id = Date.now(); //Timestamp
-    console.log(id)
     persons.unshift({ id, name, age, group });
+    console.log("persons: " + persons)
     this.setState({ persons })
   }
 
@@ -69,9 +74,22 @@ class App extends Component {
   }
 
   groupInputHandler = (event) => {
-    console.log(event.target.value)
-    const inputGroup = event.target.value;
-    this.setState({ inputGroup })
+
+    const inputGroupName = event.target.value;
+    this.setState({ inputGroupName })
+
+  }
+
+  addGroupHandler = () => {
+    // console.log(event.target.value);
+    const groups = this.state.groups;
+    const groupName = this.state.inputGroupName;
+    const id = Date.now() + 1; //Timestamp
+    console.log("addGroupHandler: " + groupName)
+    groups.unshift({ id, groupName });
+    console.log("groups: " + groups)
+    this.setState({ groups });
+
   }
 
 
@@ -130,6 +148,7 @@ class App extends Component {
 
     };
     let persons = null;
+    let groups = null;
 
 
 
@@ -152,6 +171,16 @@ class App extends Component {
       </div>
     );
     // }
+    groups = (
+      <div>
+        {this.state.groups.map((group, index) => {
+          return <Group
+            key={group.id}
+            groupName={group.groupName}
+            changed={(event) => this.groupInputHandler(event, group.id)} />
+        })}
+      </div>
+    );
 
 
 
@@ -173,7 +202,7 @@ class App extends Component {
     //   classes.push('bold'); //classes = ['red','bold']
     // }
 
-    console.log(this.state.persons)
+    console.log(this.state.groups)
     let formStyle = {
       margin: 'auto',
       width: '200px',
@@ -193,7 +222,7 @@ class App extends Component {
         <div className="App">
           <h1>Hi, I'm a React App</h1>
           <p className={classes.join(' ')}>This is really working!</p>
-          <p className={classes.join(' ')}>我每天都要去翔哥家玩 伊耶</p>
+          {/* <p className={classes.join(' ')}>我每天都要去翔哥家玩 伊耶</p> */}
           {/* <button
             style={style}
             onClick={this.togglePersonsHandler}>Switch Name
@@ -202,12 +231,18 @@ class App extends Component {
             <p>
               Name: <input type='text' id='name' style={{ margin: '2%' }} onChange={(event) => this.nameInputHandler(event)} />
               Age: <input type='text' id='age' onChange={(event) => this.ageInputHandler(event)} />
-              {/* Group:  <input type='text' id='group' onChange={(event) => this.groupInputHandler(event)} /> */}
               <Form.Group id='group' style={formStyle} onChange={(event) => this.groupInputHandler(event)}>
                 <Form.Label>Select Group</Form.Label>
                 <Form.Control as="select">
-                  <option>1</option>
-                  <option>2</option>
+                  {/* <option>{this.state.groups}</option> */}
+                  {/* <option>{this.state.groups.map()}</option>
+        
+                  <option>2</option> */}
+                  {this.state.groups.map((group, index) => {
+
+                    return <option>{group.groupName}</option>
+
+                  })}
                 </Form.Control>
               </Form.Group>
 
@@ -216,11 +251,18 @@ class App extends Component {
                 Add Name
             </button>
             </p>
+            Group:  <input type='text' id='group' onChange={(event) => this.groupInputHandler(event)} />
+
+            <button
+              onClick={this.addGroupHandler}>
+              Add Group
+            </button>
           </div>
 
 
 
-          <Card style={{ width: '30rem', margin: 'auto' }}>
+
+          {/* <Card style={{ width: '30rem', margin: 'auto' }}>
             <Card.Header>Group 1</Card.Header>
             <ListGroup variant="flush">
               {this.state.persons.map((person, index) => {
@@ -261,7 +303,7 @@ class App extends Component {
 
               })}
             </ListGroup>
-          </Card>
+          </Card> */}
 
         </div>
 
