@@ -21,6 +21,8 @@ class App extends Component {
     inputName: '',
     inputGroupName: '',
 
+    addInputGroupName: '',
+
     persons: [
       // { id: 'aaaaa', name: 'Max', age: 28, group: "1" },
       // { id: 'bbbbb', name: 'Manu', age: 29, group: "2" },
@@ -47,17 +49,7 @@ class App extends Component {
     })
   }*/
 
-  addPersonHandler = () => {
-    const persons = this.state.persons;
-    const name = this.state.inputName;
-    const age = this.state.inputAge;
-    const group = this.state.inputGroup;
-
-    const id = Date.now(); //Timestamp
-    persons.unshift({ id, name, age, group });
-    console.log("persons: " + persons)
-    this.setState({ persons })
-  }
+ 
 
   nameInputHandler = (event) => {
     // console.log(event.target.value);
@@ -74,20 +66,37 @@ class App extends Component {
   }
 
   groupInputHandler = (event) => {
+     console.log("groupInputHandler: "+ event.target.value);
+     const inputGroupName = event.target.value;
+     this.setState({ inputGroupName })
 
-    const inputGroupName = event.target.value;
-    this.setState({ inputGroupName })
+  }
 
+  addGroupInputHandler = (event) => {
+
+    const addInputGroupName = event.target.value;
+    this.setState({ addInputGroupName })
+
+  }
+
+  addPersonHandler = () => {
+    const persons = this.state.persons;
+    const name = this.state.inputName;
+    const age = this.state.inputAge;
+    const group = this.state.inputGroupName;
+
+    const id = Date.now(); //Timestamp
+    persons.unshift({ id, name, age, group });
+    console.log("persons: " + persons)
+    this.setState({ persons })
   }
 
   addGroupHandler = () => {
     // console.log(event.target.value);
     const groups = this.state.groups;
-    const groupName = this.state.inputGroupName;
-    const id = Date.now() + 1; //Timestamp
-    console.log("addGroupHandler: " + groupName)
+    const groupName = this.state.addInputGroupName;
+    const id = Date.now(); //Timestamp
     groups.unshift({ id, groupName });
-    console.log("groups: " + groups)
     this.setState({ groups });
 
   }
@@ -131,6 +140,8 @@ class App extends Component {
 
   // render執行後真正呈現在畫面上
   render() {
+    console.log(this.state.groups)
+    console.log(this.state.persons)
 
     const style = {
 
@@ -154,7 +165,6 @@ class App extends Component {
 
 
 
-    // if (this.state.showPersons) {
 
 
     persons = (
@@ -177,7 +187,7 @@ class App extends Component {
           return <Group
             key={group.id}
             groupName={group.groupName}
-            changed={(event) => this.groupInputHandler(event, group.id)} />
+             />
         })}
       </div>
     );
@@ -202,7 +212,7 @@ class App extends Component {
     //   classes.push('bold'); //classes = ['red','bold']
     // }
 
-    console.log(this.state.groups)
+    
     let formStyle = {
       margin: 'auto',
       width: '200px',
@@ -234,14 +244,8 @@ class App extends Component {
               <Form.Group id='group' style={formStyle} onChange={(event) => this.groupInputHandler(event)}>
                 <Form.Label>Select Group</Form.Label>
                 <Form.Control as="select">
-                  {/* <option>{this.state.groups}</option> */}
-                  {/* <option>{this.state.groups.map()}</option>
-        
-                  <option>2</option> */}
                   {this.state.groups.map((group, index) => {
-
                     return <option>{group.groupName}</option>
-
                   })}
                 </Form.Control>
               </Form.Group>
@@ -251,13 +255,16 @@ class App extends Component {
                 Add Name
             </button>
             </p>
-            Group:  <input type='text' id='group' onChange={(event) => this.groupInputHandler(event)} />
+            
+            Group:  <input type='text' id='addGroup' onChange={(event) => this.addGroupInputHandler(event)} />
 
             <button
               onClick={this.addGroupHandler}>
               Add Group
             </button>
           </div>
+
+       
 
 
 

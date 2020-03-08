@@ -7,6 +7,9 @@ import Person from '../Person/Person';
 
 const group = (props) => {
 
+    console.log(props.groupName)
+    // console.log(person.name)
+
 
     return (
         <Card>
